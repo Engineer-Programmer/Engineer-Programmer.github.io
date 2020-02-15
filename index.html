@@ -152,6 +152,406 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-小项目总结-宠物商店" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/15/%E5%B0%8F%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93-%E5%AE%A0%E7%89%A9%E5%95%86%E5%BA%97/">小项目总结:宠物商店</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/15/%E5%B0%8F%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93-%E5%AE%A0%E7%89%A9%E5%95%86%E5%BA%97/" class="archive-article-date">
+  	<time datetime="2020-02-15T03:05:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="项目技术点"><a href="#项目技术点" class="headerlink" title="项目技术点"></a>项目技术点</h2><p>(因为没学框架，暂时不能运行至用户体验)小项目利用了DAO模式,三层架构(业务逻辑层，表现层,数据访问层)三层的关系是表现层(这本该是前端·用户可视化界面，但因为还没学js技术，暂时写在main方法中)—业务逻辑层(主要写业务代码的)—-数据访问层(也称为Dao层，进行与数据库的对接)，主要是面向接口编程，本项目涵盖的知识点(面向对象思想–封装,继承,多态。还有接口，异常处理,集合，泛型集合，jdbc连接数据库,I/O流的字节输入流)</p>
+<h2 id="项目整体架构分析"><a href="#项目整体架构分析" class="headerlink" title="项目整体架构分析"></a>项目整体架构分析</h2><p>本项目一开始利用一个jar包进行导入和数据库的连接,把里面的对数据库的公共的点放在一个单独的包中，写一个封装的类BaseDao类中</p>
+<p>公共的连接方法,公共的增删改方法,公共的关闭资源方法</p>
+<p>连接方法在把部分代码写入一个文本中(database.properties配置文件中)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">driver&#x3D;com.mysql.jdbc.Driver</span><br><span class="line">url &#x3D;jdbc:mysql:&#x2F;&#x2F;127.0.0.1:3306&#x2F;petshop2</span><br><span class="line">user&#x3D;root</span><br><span class="line">password &#x3D;root</span><br></pre></td></tr></table></figure>
+
+<p>字节输入流读取出来。</p>
+<p>整体分为Dao包(进行对数据访问，写入接口，进行对接口的实现，并写一些业务(增删改查)),实体类(数据库的表结构进行封装，用于春存放与传输对象数据),Serive(相当于业务逻辑层，写入接口，实现接口，但是在接口的实现中写入Dao层的多态使用并进行调用即可),text包(相当于用户可视化界面，main方法)，util包(BaseDao类就是对数据库的访问，调用database.properties配置文件)还有一个jar包</p>
+<p>整体结构就是这样的，这里无限调用,无限封装就是降低耦合性，提高代码的可扩展性和可维护性，Dao模式隔离了数据访问代码还有业务逻辑代码，业务逻辑直接调用Dao方法，分工明确，提高了可复用性</p>
+<h2 id="项目bug点"><a href="#项目bug点" class="headerlink" title="项目bug点"></a>项目bug点</h2><p>二次回调    已解决</p>
+<p>循环调用功能    已解决</p>
+<p>余额的数据变化   已解决</p>
+<h2 id="项目功能讲解"><a href="#项目功能讲解" class="headerlink" title="项目功能讲解"></a>项目功能讲解</h2><p>每个功能，操作都进行了封装方法，有利于降低耦合性</p>
+<p>首先是登录操作可以进行商店这边登录，主人这边登录，还有退出</p>
+<h3 id="登录操作"><a href="#登录操作" class="headerlink" title="登录操作"></a>登录操作</h3><p><img src="file:///C:%5CUsers%5CLenovo%5CAppData%5CRoaming%5CTencent%5CUsers%5C1473986371%5CQQ%5CWinTemp%5CRichOle%LY$AQYT$9$UK2YWK@%9L$R.png" alt="img"></p>
+<p>退出:直接退出程序</p>
+<p>选择商店登录/主人登录需要和数据库里的数据一致才可继续接下来的操作，如果输入错误则重新输入，方法本身自调</p>
+<p>对登录操作进行了封装方法操作，返回的是object对象</p>
+<ul>
+<li><pre><code>/**
+
+  * 主界面
+  * @return
+    */
+    private static Object getLogin() {
+    System.out.println(&quot;欢迎来到宠物系统&quot;);
+    System.out.println(&quot;1.商店登录\t2.主人登录\t3.退出&quot;);
+    System.out.println(&quot;请选择：&quot;);
+    switch (input.nextInt()) {
+    case 1:
+        System.out.println(&quot;请输入商店的名称：&quot;);
+         pst1.setName(input.next());
+         System.out.println(&quot;请输入商店的密码：&quot;);
+         pst1.setPassword(input.next());
+         PetStore psd=pss.petstorelogin(pst1.getName(),pst1.getPassword());
+             if(psd!=null){
+                 System.out.println(&quot;登录成功：商店的名称是：&quot;+pst1.getName());
+                 return psd;
+             }else {
+                 System.out.println(&quot;登录失败,请重新输入...&quot;);
+                 obj=getLogin();
+             }
+        break;
+    case 2:
+        System.out.println(&quot;请输入主人的姓名：&quot;);
+         po.setName(input.next());
+         System.out.println(&quot;请输入主人的密码：&quot;);
+         po.setPassword(input.next());
+         PetOwner pok=pos.petstorelogin(po.getName(),po.getPassword());
+             if(pok!=null){
+                 System.out.println(&quot;登录成功：主人的姓名是：&quot;+po.getName());
+                 return pok;
+             }else {
+                 System.out.println(&quot;登录失败,请重新输入...&quot;);
+                 obj=getLogin();     
+             }
+        break;
+    case 3:
+        System.out.println(&quot;程序结束...&quot;);
+        System.exit(1);
+        break;
+    default:
+        System.out.println(&quot;输入失败，请重新输入....&quot;);
+    obj=getLogin();
+     break;
+ }
+ return obj;
+ }
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"> 这里商店登录操作的	 PetStore psd&#x3D;pss.petstorelogin(pst1.getName(),pst1.getPassword());就是Dao模式的调用业务逻辑层，调用不到dao层的代码，符合三层架构</span><br><span class="line"></span><br><span class="line">下一步是登录商店成功之后的步骤</span><br><span class="line"></span><br><span class="line">#### 商店的功能</span><br></pre></td></tr></table></figure>
+/**
+ * 商店的详情
+ */
+private static int Shopselect() {
+ System.out.println(&quot;1.进货宠物&quot;);
+ System.out.println(&quot;2.出售宠物交易记录&quot;);
+ System.out.println(&quot;3.查看账单&quot;);
+ System.out.println(&quot;4.查询商店余额&quot;);
+ System.out.println(&quot;5.进货宠物交易记录&quot;);
+ System.out.println(&quot;6.进货宠物数量&quot;);
+ System.out.println(&quot;7.查看所属商店宠物详情&quot;);
+ System.out.println(&quot;8.退出&quot;);
+ System.out.println(&quot;请选择：&quot;);
+ return input.nextInt();
+}
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">这里是商店的操作</span><br><span class="line"></span><br><span class="line"> *</span><br></pre></td></tr></table></figure>
+/**
+
+  * 进货宠物
+  * @param pst
+    */
+    private static void store_jinhuo(PetStore pst) {
+        System.out.println(&quot;要进货的货源1.宠物厂&quot;);
+        int jin =input.nextInt();
+        if(jin==1){
+        Type t = Jinhuo(pst);
+        int pk=psi.AddShopPet(pet);
+        if(pk&gt;0){
+            System.out.println(&quot;恭喜&quot;+pst.getName()+&quot;进货新宠物成功&quot;);
+            ac.setDeal_Type(4);
+            Pet p=psi.selectId(pet.getName());
+            ac.setPetId(p.getId());
+            ac.setSellerId(pst.getName());
+            ac.setBuyerId(&quot;宠物厂&quot;);
+            ac.setPrice(t.getPrice()*pet.getCount());
+            ac.setDealTime(pet.getBirthday());
+            int count =pet.getCount();
+            ac.setCount(count);
+            int a =acd.AddAccount(ac);
+            if(a&gt;0){
+                System.out.println(&quot;走账成功&quot;);
+            }else{
+                System.out.println(&quot;走账失败&quot;);
+                AfterLogin();
+            }
+        }else{
+            System.out.println(&quot;进货失败&quot;);
+            AfterLogin();
+        }
+        }
+    }
+  * /**
+         * 商城进货宠物
+         * @param pst
+         * @return
+         */
+        private static Type Jinhuo(PetStore pst) {
+            System.out.println(&quot;请输入要进货的宠物姓名：&quot;);
+            pet.setName(input.next());
+              TypeAllSelect();
+            System.out.println(&quot;请输入要进货的宠物类型id：&quot;);
+            pet.setType_id(input.nextInt());
+            Type t=   td.SelectIdType(pet.getType_id());
+            System.out.println(&quot;请输入要进货的宠物数量：&quot;);
+            if(pst.getCount()&gt;0 &amp;&amp; pst.getBalance()&gt;0){
+            pet.setCount(input.nextInt());
+            Date date =new Date();
+            pet.setBirthday(date);
+            pet.setStore_id(pst.getId());
+            pst.setId(pst.getId());
+            int u=pet.getCount();
+            pst.setCount(u);
+            int l=t.getPrice()*pet.getCount();
+            pst.setBalance(l);
+            int o=pss.UpdateCount(pst);
+            if(o&gt;0){
+                System.out.println(&quot;修改成功&quot;);
+            }else{
+                System.out.println(&quot;修改失败&quot;);
+                AfterLogin();
+            }
+            }else{
+                System.out.println(&quot;进货失败&quot;);
+                AfterLogin();
+            }
+            return t;
+        }
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">这里就是必须数量和金钱大于0才可进行操作，进行商城的金钱--，数量++，宠物表插入一条数据购买的宠物类型，一共多少钱，购买的数量，记录表中插入一条记录由谁卖给谁</span><br></pre></td></tr></table></figure>
+ /**
+      * 查询全部记录
+      * @param pst
+      */
+     private static void selectAlljl(PetStore pst) {
+         Map&lt;Integer,List&lt;Account&gt;&gt; map= acd.selectAll(pst.getName());
+          System.out.println(&quot;记录id\t宠物名称\t买家名称\t商家名称\t\t出售价格\t出售时间\t\t出售数量&quot;);
+          for (Account account : map.get(1)) {
+             System.out.println(account.getId()+&quot;\t&quot;+account.getPetname()+&quot;\t&quot;+account.getSellerId()+&quot;\t&quot;+account.getBuyerId()+&quot;\t&quot;+account.getPrice()+&quot;\t&quot;
+          +account.getDealTime()+&quot;\t&quot;+account.getCount());
+         }
+          System.out.println(&quot;记录id\t宠物名称\t买家名称\t\t商家名称\t出售价格\t出售时间\t\t出售数量&quot;);
+          for (Account account : map.get(2)) {
+             System.out.println(account.getId()+&quot;\t&quot;+account.getPetname()+&quot;\t&quot;+account.getSellerId()+&quot;\t&quot;+account.getBuyerId()+&quot;\t&quot;+account.getPrice()+&quot;\t&quot;
+          +account.getDealTime()+&quot;\t&quot;+account.getCount());
+         }
+     }
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">	</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">查询所有记录包括了出售和进货的记录查询，登录进去的商城通过查询记录就能查看到所有记录，当然也可以查看出售&#x2F;进货的记录，这里用到的知识点是map集合进行存储数据</span><br></pre></td></tr></table></figure>
+  PetStore pt =pss.selectprice(pst.getId());
+     System.out.println(pst.getName()+&quot;的余额为：&quot;+pt.getBalance());
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">查询商店的余额，利用登录的id得到账户的余额，会根据数据进行变化，购买一个宠物，金额也会相应的变化操作</span><br></pre></td></tr></table></figure>
+/**
+  * 添加宠物数量
+  * @param pst
+  */
+ private static void insertpetcount(PetStore pst) {
+     List&lt;Pet&gt; list =psi.selectcount(pst.getId());
+     System.out.println(&quot;宠物id\t宠物名称\t宠物类型\t出生日期\t\t所属商店\t\t宠物的数量&quot;);
+     Pet pl =null;
+     Type t=null;
+     for (int i = 0; i &lt; list.size(); i++) {
+          pl =list.get(i);
+          t=   td.SelectIdType(pl.getType_id());
+         System.out.println(pl.getId()+&quot;\t&quot;+pl.getName()+&quot;\t&quot;+t.getType_name()+&quot;\t&quot;+pl.getBirthday()+&quot;\t&quot;
+              +pst.getName()+&quot;\t&quot;+pl.getCount()                            );
+     }
+     System.out.println(&quot;请选择要进货的id：&quot;);
+     int id=input.nextInt();
+     Pet p3=psi.selectidPet(id, pst.getId());
+     if(p3==null){
+         System.out.println(&quot;没有要添加的商品数量....&quot;);
+         AfterLogin();
+     }
+     if(id==p3.getId()){
+     System.out.println(&quot;请选择要进货的数量：&quot;);
+     int count =input.nextInt();
+     if(count&gt;0 ){
+     int price= count*t.getPrice();
+     int l=    pss.Update(count, price, pst.getId());
+     int co=psi.count(count, p3.getId());
+     if(l&gt;0 &amp;&amp; co&gt;0){
+     System.out.println(&quot;进货成功...&quot;);
+     ac.setDeal_Type(4);
+     ac.setPetId(id);
+     ac.setSellerId(pst.getName());
+     ac.setBuyerId(&quot;宠物厂&quot;);
+     ac.setPrice(price);
+     ac.setDealTime(new Date());
+     ac.setCount(count);
+     acd.AddAccount(ac);
+     }
+     }else{
+         System.out.println(&quot;进货失败...&quot;);
+     }
+     }
+ }
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">添加宠物的数量，如果主人那边进行购买宠物操作，把宠物表中的购买数量变为0的话,这里就会显示数据，同理如果没有数据&#x3D;&#x3D;0的时候，这里就不会显示数据，操作的时候，会提示没有要添加的宠物数量.....</span><br><span class="line"></span><br><span class="line">根据要进货的id得到宠物表的一条数据，那条数据会进行判定操作</span><br><span class="line"></span><br><span class="line">当然这里也会对应的会把宠物表中的数量++，把商店的数量++，金钱--</span><br><span class="line"></span><br><span class="line">然后也会插入一条数据记录</span><br><span class="line"></span><br><span class="line"> *</span><br></pre></td></tr></table></figure>
+/**
+
+  * 查看所属商店宠物详情
+  * 
+  * @param pst
+    */
+    private static void store_petxiangqing(PetStore pst) {
+        List&lt;Pet&gt; list= psi.selectcongwu(pst.getId());
+        System.out.println(&quot;宠物id\t宠物名称\t宠物类型\t出生日期\t\t所属商店\t\t宠物的数量&quot;);
+        for (int i = 0; i &lt; list.size(); i++) {
+            Pet pl =list.get(i);
+             Type t=   td.SelectIdType(pl.getType_id());
+            System.out.println(pl.getId()+&quot;\t&quot;+pl.getName()+&quot;\t&quot;+t.getType_name()+&quot;\t&quot;+pl.getBirthday()+&quot;\t&quot;
+                 +pst.getName()+&quot;\t&quot;+pl.getCount()                            );
+        }
+    }
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">	</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">这里就是查询宠物表中登录商店的商店是啥，进行一一判定出来</span><br><span class="line"></span><br><span class="line">这就是商店的操作</span><br><span class="line"></span><br><span class="line">##### 总结</span><br><span class="line"></span><br><span class="line">能进行购买宠物，查看账单明细，查看账户上的余额，如果宠物的数量为0的时候，可以进行购买，当然操作的步骤会一一记录下来</span><br><span class="line"></span><br><span class="line">#### 主人的操作</span><br></pre></td></tr></table></figure>
+/**
+  * 主人列单详情
+  * @return
+  */
+ private static int showPetOwner() {
+     System.out.println(&quot;1.退回宠物&quot;);
+     System.out.println(&quot;2.购买宠物&quot;);
+     System.out.println(&quot;3.查询一共购买的总数量&quot;);
+     System.out.println(&quot;4.查看个人交易账单&quot;);
+     System.out.println(&quot;5.查询个人余额&quot;);
+     System.out.println(&quot;6.查看当前所属主人宠物详情&quot;);
+     System.out.println(&quot;7.退出&quot;);
+     return input.nextInt();
+ }
+
+</code></pre></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>/**<br>     * 退货<br>     * @param pot<br>     <em>/<br>    private static void Tuihuo(PetOwner pot) {<br>        System.out.println(“<strong><strong>**</strong></strong></em>查询七天内的交易记录<strong><strong><strong>***</strong></strong></strong>“);<br>            System.out.println(“交易id\t交易类型\t宠物名称\t买家名称\t商家名称\t交易价格\t交易时间\t\t交易数量”);</p>
+<pre><code>List&lt;Account&gt; list =acd.selectday(pot.getName());
+Account account=null;
+for (int i = 0; i &lt; list.size(); i++) {</code></pre><p> account=list.get(i);</p>
+<pre><code>System.out.println(account.getId()+&quot;\t&quot;+account.getDeal_Type()+&quot;\t&quot;+account.getPetname()+&quot;\t&quot;+account.getSellerId()+&quot;\t&quot;+account.getBuyerId()+&quot;\t&quot;+account.getPrice()+&quot;\t&quot;+account.getDealTime()+&quot;\t&quot;+account.getCount());</code></pre><p>}<br>System.out.println(“请选择要退回的宠物id:”);<br>int id =input.nextInt();<br>Account ac1=acd.selecttuihui(pot.getName(), id);<br>if(ac1!=null){<br>PetStore p9=    pss.select(ac1.getBuyerId());<br>boolean bo=    psi.Tui(ac1.getPetId(), pot.getId(), p9.getId(), ac1.getCount(), ac1.getPrice(), pot, ac1.getBuyerId());<br>           if(bo){<br>               System.out.println(“退货成功….”);<br>           }else{<br>               System.out.println(“退货失败….”);<br>           }<br>}else{<br>        System.out.println(“没有要退货的宠物…..”);<br>}<br>    }</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">这里就相当于进行7天无理由退货</span><br><span class="line"></span><br><span class="line">查看到7天内的交易记录</span><br><span class="line"></span><br><span class="line">当然这里只能退全部还没有写那个退的数量(当然也无所谓了)</span><br><span class="line"></span><br><span class="line">根据要退回的id查到一条记录，如果输入的是没有的数据，会提示没有要退货的宠物。。。。。</span><br><span class="line"></span><br><span class="line">如果有则继续操作，会把要在数据库那边修改的数据进行统一的放到一个业务逻辑层完成，有这边得到退货的成功与否</span><br><span class="line"></span><br><span class="line"> *</span><br></pre></td></tr></table></figure>
+<p> /**</p>
+<pre><code> * 主人进行购买宠物
+
+ * @param pot
+
+ * @return
+   */
+   private static void Shopping(PetOwner pot) {
+       List&lt;PetStore&gt; plist=pss.SelectAll();
+       PetStore p1=null;
+       System.out.println(&quot;商店id\t商店名称\t商店金额\t\t商店数量&quot;);
+       for (int i = 0; i &lt; plist.size(); i++) {
+           p1 =plist.get(i);
+           System.out.println(p1.getId()+&quot;\t&quot;+p1.getName()+&quot;\t&quot;+p1.getBalance()+&quot;\t&quot;+p1.getCount());
+       }
+       PetStore p5 =new  PetStore();
+       System.out.println(&quot;请选择你要购买的商店id：&quot;);
+   p5.setId(input.nextInt());
+       Pet p3=psi.selectid(p5.getId());
+       PetStore p6=pss.selectName(p5.getId());
+       PetStore p7 =pss.select(p5.getId());
+
+   if(p3==null){
+           System.out.println(&quot;没有该商店....&quot;);
+       Shopping(pot);
+   }
+   if(p7.getBalance()&gt;0 &amp;&amp; p7.getCount()&gt;0){
+       List&lt;Pet&gt; list= psi.selectcongwu(p5.getId());
+
+
+       System.out.println(&quot;宠物id\t宠物名称\t宠物类型\t出生日期\t\t所属商店\t\t宠物的数量&quot;);
+        Pet    pl=null;
+       Type t=null;
+       for (int i = 0; i &lt; list.size(); i++) {
+       pl=list.get(i);
+           t=   td.SelectIdType(pl.getType_id());
+       if(pl.getCount()&gt;0){
+       System.out.println(pl.getId()+&quot;\t&quot;+pl.getName()+&quot;\t&quot;+t.getType_name()+&quot;\t&quot;+pl.getBirthday()+&quot;\t&quot;
+            +pl.getStore_id()+&quot;\t&quot;+pl.getCount()                            );
+       }    
+       }
+   System.out.println(&quot;请输入要购买商城中的宠物id&quot;);
+   int ll =input.nextInt();
+       Pet p4 =psi.select(ll,p5.getId());
+
+            System.out.println(&quot;请输入要购买的宠物数量：&quot;);
+            int count=input.nextInt();
+            if( p4!=null &amp;&amp; p4.getCount()&gt;0 &amp;&amp; count!=0){
+            boolean boo=    psi.all(count, ll, p1.getId(), pot.getId(), t, pot, p6);
+        if(boo){
+              System.out.println(&quot;购买成功....&quot;);
+                AfterLogin();
+        }
+            }else{
+            System.out.println(&quot;购买失败&quot;);
+            AfterLogin();
+             }
+   }else{
+       System.out.println(&quot;购买失败&quot;);
+       AfterLogin();
+   }
+   }
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">	</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">这里就是主人进行购买宠物的操作功能</span><br><span class="line"></span><br><span class="line">先查询到所有的商店，输入商店的编号，如果没有提示没有该商店.... 继续输入，如果有则继续操作</span><br><span class="line"></span><br><span class="line">​	Pet p3&#x3D;psi.selectid(p5.getId());&#x2F;&#x2F;得到该商店的所有购买宠物</span><br><span class="line"></span><br><span class="line"> 	PetStore p6&#x3D;pss.selectName(p5.getId());&#x2F;&#x2F;得到该商城的名字</span><br><span class="line">   	PetStore p7 &#x3D;pss.select(p5.getId());&#x2F;&#x2F;得到该商城的整条信息</span><br><span class="line"></span><br><span class="line">如果该商城的金额&gt;0 数量&gt;0即可继续操作即可得到所有该商城的宠物信息，这里宠物的数量&#x3D;&#x3D;0不显示</span><br><span class="line"></span><br><span class="line">输入你要购买的宠物</span><br><span class="line"></span><br><span class="line"> 	Pet p4 &#x3D;psi.select(ll,p5.getId());&#x2F;&#x2F;会得到该商城的一条数据</span><br><span class="line"></span><br><span class="line">然后你要购买的数量，之后进行判断得到的一条数据不为空，然后你要购买的数量比须大于0才可继续操作，</span><br><span class="line"></span><br><span class="line">会把要在数据库那边修改的数据进行统一的放到一个业务逻辑层完成，有这边得到购买宠物的成功与否，无论如何都会退回主人功能操作</span><br></pre></td></tr></table></figure></code></pre><p>Account ac=    acd.selectcount(pot.getName());<br>              System.out.println(“购买宠物总数量：”+ac.getSumcount());</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">表示该主人一共购买了多少宠物</span><br><span class="line"></span><br><span class="line">根据记录表中的count属性</span><br><span class="line"></span><br><span class="line">	PetOwner po&#x3D;	pos.selectprice(pot.getId());</span><br><span class="line">		System.out.println(pot.getName()+&quot;的总金额为：&quot;+po.getMoney());</span><br><span class="line">查询商店的余额，利用登录的id得到账户的余额，会根据数据进行变化，购买一个宠物，退回一个宠物,金额也会相应的变化操作</span><br></pre></td></tr></table></figure>
+<p>/**<br>     * 查询个人交易账单<br>     * @param pot<br>     */<br>    private static void selectgrjy(PetOwner pot) {<br>        Map&lt;Integer,List<Account>&gt; map1= acd.selectAll(pot.getName());<br>        System.out.println(“交易id\t宠物名称\t买家名称\t\t商家名称\t交易价格\t交易时间\t\t交易数量”);<br>         for (Account account : map1.get(2)) {<br>            System.out.println(account.getId()+”\t”+account.getPetname()+”\t”+account.getSellerId()+”\t”+account.getBuyerId()+”\t”+account.getPrice()+”\t”<br>         +account.getDealTime()+”\t”+account.getCount());<br>        }<br>    }</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">也就是根据账单记录表查询出该主人一共交易了多少记录，一一判定出来</span><br></pre></td></tr></table></figure>
+<p>/**<br>     * 查看当前所属主人详情<br>     * @param pot<br>     */<br>    private static void selectcwzr(PetOwner pot) {<br>        List<Pet> list=   psi.selectzhur(pot.getId());<br>           System.out.println(“宠物id\t宠物名称\t宠物类型\t出生日期\t\t所属主人\t宠物的数量”);<br>            for (int i = 0; i &lt; list.size(); i++) {<br>                Pet pl =list.get(i);<br>                 Type t=   td.SelectIdType(pl.getType_id());<br>                System.out.println(pl.getId()+”\t”+pl.getName()+”\t”+t.getType_name()+”\t”+pl.getBirthday()+”\t”<br>                     +pot.getName()+”\t”+pl.getCount()                            );<br>            }<br>    }</p>
+<p>```</p>
+<p>查到当前所属的主人列表，因为pet表中的store_id判定的是最后一个购买该商品的主人</p>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>这边主人会进行退货宠物，购买宠物，查看主人当前的余额，购买的总数量，所属主人的详情</p>
+<h2 id="项目总结"><a href="#项目总结" class="headerlink" title="项目总结"></a>项目总结</h2><p>这个小项目不管是主人的操作，还是商店这边的操作，都像是一个小的购物平台，当然还有许多不完善的东西，</p>
+<p>这个小项目也是我几天的操作，当然也有老师的讲解使我有些地方豁然开朗，很感谢</p>
+<p>我现在还有许多不足的地方，对某些知识点的梳理，熟练使用还不够，我今后多复习，多思考，多练习，多想为什么这里该这么做，为之后我工作不至于进入公司不懂操作啥的打下一定的基础。这次小项目使我有些地方也进步不少。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/15/%E5%B0%8F%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93-%E5%AE%A0%E7%89%A9%E5%95%86%E5%BA%97/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-我的第一篇博客文章" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
