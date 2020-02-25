@@ -20,7 +20,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no", user-scalable=no">
-  <title>我的第一篇博客文章Hexo</title>
+  <title>如何搭建自己的博客(hexo)Hexo</title>
   <link rel="shortcut icon" href="">
   
     
@@ -109,8 +109,8 @@
             </header>
                 
 <header class="blog-post-page-title">
-    <h4>我的第一篇博客文章</h4>
-    <time datetime="2020-02-07T02:10:47.000Z"><i class="fa fa-clock-o"></i>2020-02-07</time>
+    <h4>如何搭建自己的博客(hexo)</h4>
+    <time datetime="2020-02-25T14:37:41.000Z"><i class="fa fa-clock-o"></i>2020-02-25</time>
     
     
     
@@ -122,9 +122,32 @@
     <article class="blog-post-block blog-post-page-content">
         <section>
             
-                <h1 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h1><p>内容</p>
-<h1 id="第二章"><a href="#第二章" class="headerlink" title="第二章"></a>第二章</h1><p>内容</p>
-<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p><a href="http://www.codesheep.cn" target="_blank" rel="noopener">www.codesheep.cn</a></p>
+                <h2 id="咋样搭建自己的个人博客"><a href="#咋样搭建自己的个人博客" class="headerlink" title="咋样搭建自己的个人博客"></a>咋样搭建自己的个人博客</h2><p>第一步:下载node.js  //下载地址:<a href="https://nodejs.org/en/" target="_blank" rel="noopener">https://nodejs.org/en/</a><br>第二步:(win)win+r进入命令行测试 node  -v   npm -v是否正确<br>第三步:借助包管理器淘宝的cnpm(npm install -g cnpm –registry=<a href="https://registry.npm.taobao.org）" target="_blank" rel="noopener">https://registry.npm.taobao.org）</a><br>第四步:测试cnpm  cnpm  -v  是否正确<br>第五步:创建hexo框架  cnpm install -g hexo-cli  并测试 hexo -v 是否正确<br>第六步:测试路径:chdir 并创建文件夹 mkdir blog  并进入文件夹中 cd blog/ </p>
+<p>第七步:hexo init进行hexo的创建博客,并查看当下目录dir</p>
+<p>第八步:hexo s 查看是否生成hexo网站:4r，如果要断开ctrl+c即可</p>
+<p>第九步:复制到浏览器上</p>
+<p>第十步:创建博客: hexo n “我的第一篇博客文章”，会生成一个目录</p>
+<p>第十一步：进入cd source/_posts/这个目录下，dir查看当前目录</p>
+<p>第十二步:我的第一篇博客文章.md进行编写即可</p>
+<p>第十三步:cd ../..退回blog目录下</p>
+<p>第十四步:hexo clean 清理博客   hexo g 生成博客   在进行hexo s一下</p>
+<p>第十五步:进入github上部署一个仓库  名字: 名字.github.io   描述:我的hexo博客</p>
+<p>第十六步:装一个git的部署插件:cnpm install –save hexo-deployer-git</p>
+<p>第十七步:_config.yml打开文件进行修改 Deployment下</p>
+<p>   type:  git</p>
+<p>   repo:  <a href="https://github.com/Engineer-Programmer/Engineer-Programmer.github.io.git" target="_blank" rel="noopener">https://github.com/Engineer-Programmer/Engineer-Programmer.github.io.git</a></p>
+<p>   branch:  master</p>
+<p>第十八步:打开github.com刷新页面复制:Engineer-Programmer.github.io并记住前面是https:协议</p>
+<p>或者修改git命令上的user.name  ,user.email </p>
+<p>先修改git init</p>
+<p>git config –replace-all user.name “github的用户名”</p>
+<p>git config –replace-all user.email “qq邮箱”</p>
+<p>第十九步:<a href="https://github.com/litten/hexo-theme-yilia进入自定义github" target="_blank" rel="noopener">https://github.com/litten/hexo-theme-yilia进入自定义github</a> hexo页面后</p>
+<p>然后进行克隆命令行:git clone <a href="https://github.com/litten/hexo-theme-yilia.git" target="_blank" rel="noopener">https://github.com/litten/hexo-theme-yilia.git</a>  themes/yilia</p>
+<p>第二十步:修改Extensions下的theme: yilia</p>
+<p>第二十一步:hexo clean 清理博客   hexo g 生成博客   在进行hexo s一下:在把4000端口复制到网站上即可</p>
+<p>第二十二步:hexo d 传到远端 再刷新一下hexo网页即可 ,Engineer-Programmer.github.io即可进入生成的网页</p>
+<p><a href="https://hexo.io/themes/" target="_blank" rel="noopener">https://hexo.io/themes/</a> :hexo的界面</p>
 
             
         </section>
@@ -138,12 +161,10 @@
     	
     	
 		
-			<a href="/2020/02/15/%E5%B0%8F%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93-%E5%AE%A0%E7%89%A9%E5%95%86%E5%BA%97/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="小项目总结:宠物商店">上一篇</a>
-		
 
 		
 		
-			<a href="/2020/02/07/hello-world/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="Hello World">下一篇</a>
+			<a href="/2020/02/15/%E5%B0%8F%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93-%E5%AE%A0%E7%89%A9%E5%95%86%E5%BA%97/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="小项目总结:宠物商店">下一篇</a>
 		
 
         <div style="clear: both;"></div>
@@ -246,7 +267,7 @@
                 return out;
             }
             // 生成
-            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("http://engineer-programmer.github.io/2020/02/07/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0/")}).hide();
+            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("http://engineer-programmer.github.io/2020/02/25/%E5%A6%82%E4%BD%95%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2-hexo/")}).hide();
             var canvas=qrcode.find('canvas').get(0);
             $('.post-qrcode-content-img').attr('src',canvas.toDataURL('image/jpg'));
         </script>
